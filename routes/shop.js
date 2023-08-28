@@ -18,7 +18,7 @@ router.get('/products/:productId', shopController.GetProduct);
 // router.post('/create-order', shopController.PostOrder);
 
 // //getting the post request after you add an item to the cart
-// router.post('/cart', shopController.PostCart);
+router.post('/cart', shopController.PostCart);
 
 // router.get('/orders', shopController.GetOrder);
 

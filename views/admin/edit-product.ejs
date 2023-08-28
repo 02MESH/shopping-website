@@ -5,7 +5,6 @@
 
 <body>
    <%- include('../includes/navigation.ejs') %>
-
     <main>
         <form class="product-form" action="<% if (editing) {%>/admin/edit-product<%} else {%>/admin/add-product<%}%>" method="POST">
             <div class="form-control">
@@ -27,7 +26,7 @@
             <button class="btn" type="submit"><% if (editing) { %>Update Product<% } else {%>Add Product<%}%></button>
             <!--Check whether if it is in edit mode to send the id-->
             <% if (editing) {%>
-                <input type="hidden" name="productId" id="productId" value="<%= product.id %>">
+                <input type="hidden" name="productId" id="productId" value="<%= product._id %>">
             <%}%>
         </form>
     </main>
