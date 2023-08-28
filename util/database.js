@@ -5,13 +5,16 @@ let _db;
 
 const mongoConnect = callback => {
     MongoClient.connect('mongodb+srv://meshwildias:RqLjRgMOGfrTJ61O@cluster1.4f9aqko.mongodb.net/?retryWrites=true&w=majority')
-        .then(result => {
+        .then(client => {
             console.log('Connected');
-            _db = client.db;
+            _db = client.db('test');
             callback();
         })
-        .catch(err => console.log(err));
-}
+        .catch(err => {
+            console.log(err);
+            throw err;
+        });
+};
 
 const getDb = () => {
     if (_db) {

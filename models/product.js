@@ -1,4 +1,5 @@
 const getDb = require('../util/database').getDb;
+const mongodb = require('mongodb').ObjectId;
 
 class Product {
     constructor(title, price, description, imageUrl) {
@@ -10,7 +11,7 @@ class Product {
 
     save() {
         const db = getDb();
-        db.collection('products').insertOne(this)
+        return db.collection('products').insertOne(this)
             .then(result => {
                 console.log(result);
             })
@@ -18,33 +19,26 @@ class Product {
                 console.log(err);
             })
     }
-}
 
-
-
-const Product = sequelize.define('product', {
-    id: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
-        primaryKey: true
-    },
-    title: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    price: {
-        type: Sequelize.DOUBLE,
-        allowNull: false
-    },
-    imageUrl: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    description: {
-        type: Sequelize.STRING,
-        allowNull: false
+    static fetchAll() {
+        const db = getDb();
+        return db.collection('products').find().toArray()
+        .then(array => {
+            return array;
+        })
+        .catch(err => console.log(err));
     }
-});
+
+    static findById(id) {
+        const db = getDb();
+        return db.collection('products')
+        .find({_id: new mongodb(id)})
+        .next()
+        .then(product => {
+            return product;
+        })
+        .catch(err => console.log(err));
+    }
+}
 
 module.exports = Product;
