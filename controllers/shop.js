@@ -39,18 +39,15 @@ const getProduct = (req, res, next) => {
 
 const getCart = (req, res, next) => {
     //Get the cart
-    req.user.getCart()
-        .then(cart => {
-            return cart.getProducts().then(products => {
-                res.render('shop/cart', {
-                    docTitle: 'Your Cart',
-                    path: '/cart',
-                    //Return the products array and render it
-                    products: products
-                });
-            }).catch(err => {
-                console.log(err);
-            })
+    req.user
+        .getCart()
+        .then(products => {
+            res.render('shop/cart', {
+                docTitle: 'Your Cart',
+                path: '/cart',
+                //Return the products array and render it
+                products: products
+            });
         }).catch(err => {
             console.log(err);
         });
@@ -60,83 +57,25 @@ const postCart = (req, res, next) => {
     const productId = req.body.productId;
     Product.findById(productId)
         .then(product => {
+            //js treats this as a string but not really
             return req.user.addToCart(product);
         })
         .then(result => {
             console.log(result);
+            res.redirect('/cart')
         })
-    // let fetchedCart;
-    // let newQuantity = 1;
-    // req.user.getCart()
-    //     .then(cart => {
-    //         fetchedCart = cart;
-    //         return cart.getProducts({ where: { id: productId } });
-    //     })
-    //     .then(products => {
-    //         let product;
-    //         if (products.length > 0) {
-    //             product = products[0];
-    //         }
-    //         if (product) {
-    //             const oldQuantity = product.cartItem.quantity;
-    //             newQuantity = oldQuantity + 1;
-    //             return product;
-    //         }
-    //         return Product.findByPk(productId);
-    //     })
-    //     .then(product => {
-    //         return fetchedCart.addProduct(product, {
-    //             through: { quantity: newQuantity }
-    //         });
-    //     })
-    //     .then(() => {
-    //         res.redirect('/cart')
-    //     })
-    //     .catch(err => {
-    //         console.log(err);
-    //     })
 }
-
-const getCheckout = (req, res, next) => {
-    res.render('shop/checkout', {
-        docTitle: 'Checkout',
-        path: '/checkout'
-    });
-};
 
 const deleteCartItem = (req, res, next) => {
     const productId = req.body.productId;
-    req.user.getCart()
-        .then(cart => {
-            return cart.getProducts({ where: { id: productId } });
-        }).then(products => {
-            const product = products[0];
-            product.cartItem.destroy();
-        }).then(result => {
+    req.user.deleteItemFromCart(productId)
+        .then(result => {
             res.redirect('/cart');
         }).catch(err => console.log(err));
 }
 
 const postOrder = (req, res, next) => {
-    let fetchedCart;
-    req.user.getCart()
-        .then(cart => {
-            fetchedCart = cart;
-            return cart.getProducts();
-        })
-        .then(products => {
-            req.user.createOrder()
-                .then(order => {
-                    return order.addProducts(products.map(product => {
-                        product.orderItem = { quantity: product.cartItem.quantity };
-                        return product;
-                    }));
-                })
-                .catch(err => console.log(err));
-        })
-        .then(result => {
-            return fetchedCart.setProducts(null);
-        })
+    req.user.addOrder()
         .then(result => {
             res.redirect('/orders');
         })
@@ -145,7 +84,7 @@ const postOrder = (req, res, next) => {
 
 const getOrders = (req, res, next) => {
     req.user
-        .getOrders({ include: ['products'] })
+        .getOrders()
         .then(orders => {
             res.render('shop/orders', {
                 docTitle: 'Orders',
@@ -160,7 +99,6 @@ module.exports = {
     GetProducts: getProducts,
     GetIndex: getIndex,
     GetCart: getCart,
-    GetCheckout: getCheckout,
     GetOrder: getOrders,
     GetProduct: getProduct,
     PostCart: postCart,
