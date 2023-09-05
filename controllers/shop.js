@@ -1,7 +1,8 @@
 const Product = require('../models/product');
+const mongoose = require('mongoose');
 
 const getProducts = (req, res, next) => {
-    Product.fetchAll().then(products => {
+    Product.find().then(products => {
         res.render('shop/product-list', {
             prods: products,
             docTitle: 'All Products',
@@ -13,7 +14,7 @@ const getProducts = (req, res, next) => {
 }
 
 const getIndex = (req, res, next) => {
-    Product.fetchAll().then(products => {
+    Product.find().then(products => {
         res.render('shop/index', {
             prods: products,
             docTitle: 'Shop',
@@ -25,7 +26,7 @@ const getIndex = (req, res, next) => {
 };
 
 const getProduct = (req, res, next) => {
-    const productId = req.params.productId;
+    const productId = new mongoose.Types.ObjectId(req.params.productId);
     Product.findById(productId).then(product => {
         res.render('shop/product-detail', {
             product: product,

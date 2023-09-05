@@ -2,14 +2,14 @@ const express = require('express');
 const router = express.Router();
 const shopController = require('../controllers/shop');
 
-// router.get('/', shopController.GetIndex);
+router.get('/', shopController.GetIndex);
 
-// router.get('/products', shopController.GetProducts);
+router.get('/products', shopController.GetProducts);
 
 // router.post('/delete-cart-item', shopController.DeleteCartItem);
 
 // // //Handling specific product page
-// router.get('/products/:productId', shopController.GetProduct);
+router.get('/products/:productId', shopController.GetProduct);
 
 // // //Loading the cart page
 // router.get('/cart', shopController.GetCart);
