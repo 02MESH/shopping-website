@@ -8,7 +8,6 @@ router.get('/edit-product/:productId', adminController.EditProduct);
 
 router.post('/edit-product', adminController.PostEditProduct);
 
-// // //send this request to the deleteProduct middleware
 router.post('/delete-product', adminController.DeleteProduct);
 
 router.get('/products', adminController.GetProduct);

@@ -57,7 +57,13 @@ const postAddProducts = (req, res, next) => {
     const imageUrl = req.body.imageUrl;
     const description = req.body.description;
     const price = req.body.price;
-    const product = new Product({ title: title, price: price, description: description, imageUrl: imageUrl });
+    const product = new Product({
+        title: title,
+        price: price,
+        description: description,
+        imageUrl: imageUrl,
+        userId: req.user
+    });
     product.save()
         .then(result => {
             console.log('Created Product');
@@ -68,6 +74,7 @@ const postAddProducts = (req, res, next) => {
 const getProducts = (req, res, next) => {
     Product.find()
         .then(products => {
+            console.log(products);
             res.render('admin/products', {
                 prods: products,
                 docTitle: 'Admin Products',

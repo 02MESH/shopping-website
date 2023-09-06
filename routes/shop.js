@@ -6,19 +6,16 @@ router.get('/', shopController.GetIndex);
 
 router.get('/products', shopController.GetProducts);
 
-// router.post('/delete-cart-item', shopController.DeleteCartItem);
-
-// // //Handling specific product page
 router.get('/products/:productId', shopController.GetProduct);
 
-// // //Loading the cart page
-// router.get('/cart', shopController.GetCart);
+router.post('/cart', shopController.PostCart);
 
-// router.post('/create-order', shopController.PostOrder);
+router.post('/delete-cart-item', shopController.DeleteCartItem);
 
-// // //getting the post request after you add an item to the cart
-// router.post('/cart', shopController.PostCart);
+router.get('/cart', shopController.GetCart);
 
-// router.get('/orders', shopController.GetOrder);
+router.post('/create-order', shopController.PostOrder);
+
+router.get('/orders', shopController.GetOrder);
 
 module.exports = router;
